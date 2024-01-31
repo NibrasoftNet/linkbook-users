@@ -1,0 +1,115 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Role {
+  id: ID!
+  name: String!
+}
+
+type Status {
+  id: ID!
+  name: String!
+}
+
+type User {
+  id: ID!
+  email: String
+  password: String
+  provider: StoreEnum!
+  socialId: String
+  firstName: String
+  lastName: String
+  phone: String!
+  role: Role
+  status: Status
+  deletedAt: DateTime
+}
+
+enum StoreEnum {
+  email
+  facebook
+  google
+  twitter
+  apple
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type AuthRegisterResponseDto {
+  userId: Int!
+  expiryDate: Float!
+}
+
+type LoginResponse {
+  token: String!
+  refreshToken: String!
+  tokenExpires: Float!
+  user: User
+}
+
+type SoftDeleteResult {
+  affected: Int!
+}
+
+type Query {
+  refresh: LoginResponse!
+  findMe: User!
+  logout: SoftDeleteResult!
+  users: [User!]!
+  user(id: Int!): User!
+}
+
+type Mutation {
+  registerUser(authRegisterLoginDto: AuthRegisterLoginDto!): AuthRegisterResponseDto!
+  confirmEmail(confirmEmailDto: ConfirmEmailDto!): Boolean!
+  resendOtp(resendOtpDto: ResendOtpDto!): AuthRegisterResponseDto!
+  loginByEmail(authEmailLoginDto: AuthEmailLoginDto!): LoginResponse!
+  createUser(createUserDto: CreateUserDto!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Int!): User!
+}
+
+input AuthRegisterLoginDto {
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+  phone: String!
+}
+
+input ConfirmEmailDto {
+  otp: String!
+  userId: Int!
+}
+
+input ResendOtpDto {
+  userId: Int!
+}
+
+input AuthEmailLoginDto {
+  email: String!
+  password: String!
+}
+
+input CreateUserDto {
+  email: String!
+  password: String!
+  phone: String!
+  provider: String
+  socialId: String
+  firstName: String!
+  lastName: String!
+  role: ID
+  status: ID
+  hash: String
+}
+
+input UpdateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
