@@ -18,6 +18,8 @@ import { ConfirmEmailDto } from './dto/confirm-email.dto';
 import { ResendOtpDto } from './dto/resend-otp.dto';
 import { CurrentSession, CurrentUser, Public } from '@NibrasoftNet/linkbook-commons';
 import { RolesGuard } from '../roles/roles.guard';
+import { AuthForgotPasswordDto } from './dto/auth-forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Resolver(() => User)
 export class AuthResolver {
@@ -92,6 +94,41 @@ export class AuthResolver {
   async logout(@CurrentSession() session: JwtRefreshPayloadType): Promise<SoftDeleteResult> {
     return await this.authService.logout(session);
   }
+
+  @Public()
+  @Mutation(() => AuthRegisterResponseDto, { name: 'forgetPasswordEmail' })
+  async forgotPassword(
+    @Args('forgotPasswordDto') forgotPasswordDto: AuthForgotPasswordDto,
+  ): Promise<AuthRegisterResponseDto> {
+    try {
+      return await this.authService.forgotPassword(forgotPasswordDto.email);
+    } catch (error) {
+      throw new HttpResponseException(error);
+    }
+  }
+
+  @Public()
+  @Mutation(() => Boolean, { name: 'resetPassword' })
+  async resetPassword(@Args('resetPasswordDto') resetPasswordDto: ResetPasswordDto): Promise<boolean> {
+    try {
+      return this.authService.resetPassword(resetPasswordDto);
+    } catch (error) {
+      throw new HttpResponseException(error);
+    }
+  }
+
+
+  @Public()
+  @Mutation(() => Boolean, { name: 'confirmOTP' })
+  async confirmOTP(@Args('confirmEmailDto') confirmEmailDto: ConfirmEmailDto): Promise<boolean> {
+    try {
+      return await this.authService.confirmOTP(confirmEmailDto);
+    } catch (error) {
+      throw new HttpResponseException(error);
+    }
+  }
+
+
 
 
 /*  @UseGuards(AccessAuthGuard, RolesGuard)

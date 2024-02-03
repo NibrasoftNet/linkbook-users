@@ -37,6 +37,7 @@ import { ResendOtpDto } from './dto/resend-otp.dto';
 import { ClientGrpc } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { SharedServiceClient } from '../proto/shared';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable()
 export class AuthService implements OnModuleInit {
@@ -83,6 +84,8 @@ export class AuthService implements OnModuleInit {
 
     const data = this.getOtpObject(user.id)
     const otpRes = await this.otpService.create(data)
+    const emailResult = await firstValueFrom(this.sharedService.confirmEmail({ otp: data.otp, expiryDate: data.expiryDate }));
+    console.log('emailResult', emailResult);
     return new AuthRegisterResponseDto(otpRes.userId, otpRes.expiryDate)
   }
 
@@ -138,17 +141,7 @@ export class AuthService implements OnModuleInit {
       throw new PreconditionFailedException('User already confirmed');
     }
 
-    const userOtp = await this.otpService.findOneOrFail({userId: confirmEmailDto.userId})
-    const isValidOtp = await bcrypt.compare(
-        confirmEmailDto.otp,
-        userOtp.otp,
-    );
-    if (!isValidOtp) {
-      throw new BadRequestException('OTP not correct')
-    }
-    if (userOtp.expiryDate < Date.now()) {
-      throw new BadRequestException('OTP Expired')
-    }
+    await this.confirmOTP(confirmEmailDto)
 
     user.status = plainToClass(Status, {
       id: StatusEnum.ACTIVE,
@@ -188,6 +181,53 @@ export class AuthService implements OnModuleInit {
       refreshToken,
       tokenExpires,
     };
+  }
+
+  async forgotPassword(email: string): Promise<AuthRegisterResponseDto> {
+    const user = await this.usersService.findOne({
+      email,
+    });
+
+    if (!user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: {
+            email: 'emailNotExists',
+          },
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    return await this.resendOtp({ userId: user.id })
+  }
+
+  async confirmOTP (confirmEmailDto: ConfirmEmailDto) {
+    const userOtp = await this.otpService.findOneOrFail({userId: confirmEmailDto.userId})
+    const isValidOtp = await bcrypt.compare(
+      confirmEmailDto.otp,
+      userOtp.otp,
+    );
+    if (!isValidOtp) {
+      throw new BadRequestException('OTP not correct')
+    }
+    if (userOtp.expiryDate < Date.now()) {
+      throw new BadRequestException('OTP Expired')
+    }
+    return true
+  }
+
+  async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<boolean> {
+    const user = await this.usersService.findOne({ id: resetPasswordDto.userId });
+    user.password = resetPasswordDto.password;
+
+    await this.sessionService.softDelete({
+      user: {
+        id: user.id,
+      },
+    });
+    await user.save();
+    return true
   }
 
   async logout(data: Pick<JwtRefreshPayloadType, 'sessionId'>):Promise<SoftDeleteResult> {
