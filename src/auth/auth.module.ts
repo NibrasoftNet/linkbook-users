@@ -41,5 +41,6 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     JwtRefreshStrategy,
     AnonymousStrategy
   ],
+  exports: [AuthService]
 })
 export class AuthModule {}

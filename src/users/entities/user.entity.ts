@@ -61,7 +61,7 @@ export class User extends EntityHelper {
 
   @Field(() => String)
   @Index()
-  @Column({ type: 'varchar', nullable: false, unique: true })
+  @Column({ type: 'varchar', nullable: true, unique: true })
   @Expose({ groups: ['me', 'admin'] })
   phone: string;
 

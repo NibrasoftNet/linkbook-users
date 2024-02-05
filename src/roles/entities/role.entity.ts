@@ -5,7 +5,7 @@ import { EntityHelper } from '../../utils/entities/entity-helper';
 
 @ObjectType()
 @Entity()
-export class Role extends EntityHelper {
+export class Role {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   @IsNumber()

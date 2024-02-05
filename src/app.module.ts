@@ -4,6 +4,7 @@ import {ConfigModule} from "@nestjs/config";
 import authConfig from './auth/config/auth.config';
 import appConfig from "./config/app.config";
 import databaseConfig from "./database/config/database.config";
+import googleConfig from './auth-google/config/google.config';
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {TypeOrmConfigService} from "./database/typeorm-config.service";
 import { DataSource, DataSourceOptions } from 'typeorm';
@@ -15,6 +16,7 @@ import { SessionModule } from './session/session.module';
 import { OtpModule } from './otp/otp.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './auth/strategies/jwt.strategy';
+import { AuthGoogleModule } from './auth-google/auth-google.module';
 
 
 @Global()
@@ -22,7 +24,7 @@ import { JwtStrategy } from './auth/strategies/jwt.strategy';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, authConfig, databaseConfig], //, mailConfig, fileConfig
+      load: [appConfig, authConfig, googleConfig, databaseConfig],
       envFilePath: ['.env'],
     }),
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({
@@ -42,6 +44,7 @@ import { JwtStrategy } from './auth/strategies/jwt.strategy';
     UsersModule,
     SessionModule,
     OtpModule,
+    AuthGoogleModule,
   ],
   controllers: [],
   providers: [JwtStrategy],

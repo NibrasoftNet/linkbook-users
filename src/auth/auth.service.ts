@@ -38,6 +38,8 @@ import { ClientGrpc } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { SharedServiceClient } from '../proto/shared';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { SocialInterface } from '../utils/types/social.interface';
+import { NullableType } from '@NibrasoftNet/linkbook-commons';
 
 @Injectable()
 export class AuthService implements OnModuleInit {
@@ -238,6 +240,92 @@ export class AuthService implements OnModuleInit {
 
   async findMe(user: JwtPayloadType) {
     return this.usersService.findOne({id: user.id})
+  }
+
+  async validateSocialLogin(
+    authProvider: string,
+    socialData: SocialInterface,
+  ): Promise<LoginResponse> {
+    let user: NullableType<User> = null;
+    const socialEmail = socialData.email?.toLowerCase();
+    let userByEmail: NullableType<User> = null;
+
+    if (socialEmail) {
+      userByEmail = await this.usersService.findOne({
+        email: socialEmail,
+      });
+    }
+
+    if (socialData.id) {
+      user = await this.usersService.findOne({
+        socialId: socialData.id,
+        provider: authProvider,
+      });
+    }
+
+    if (user) {
+      if (socialEmail && !userByEmail) {
+        user.email = socialEmail;
+      }
+      this.usersService.update(user.id, user);
+    } else if (userByEmail) {
+      user = userByEmail;
+    } else {
+      const role = {
+        id: RoleEnum.USER,
+      };
+      const status = {
+        id: StatusEnum.ACTIVE,
+      };
+
+      user = await this.usersService.create({
+        email: socialEmail ?? null,
+        firstName: socialData.firstName ?? null,
+        lastName: socialData.lastName ?? null,
+        socialId: socialData.id,
+        provider: authProvider,
+        phone:'12345678',
+        role,
+        status,
+      });
+
+      user = await this.usersService.findOne({
+        id: user?.id,
+      });
+    }
+
+    if (!user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: {
+            user: 'userNotFound',
+          },
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    const session = await this.sessionService.create({
+      user,
+    });
+
+    const {
+      token: jwtToken,
+      refreshToken,
+      tokenExpires,
+    } = await this.getTokensData({
+      id: user.id,
+      role: user.role,
+      sessionId: session.id,
+    });
+
+    return {
+      refreshToken,
+      token: jwtToken,
+      tokenExpires,
+      user,
+    };
   }
 
   private async getTokensData(data: {

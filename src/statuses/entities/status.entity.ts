@@ -5,7 +5,7 @@ import { EntityHelper } from '../../utils/entities/entity-helper';
 
 @ObjectType()
 @Entity()
-export class Status extends EntityHelper {
+export class Status  {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   id: number;
