@@ -17,6 +17,7 @@ import { OtpModule } from './otp/otp.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './auth/strategies/jwt.strategy';
 import { AuthGoogleModule } from './auth-google/auth-google.module';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
 
 @Global()
@@ -29,6 +30,8 @@ import { AuthGoogleModule } from './auth-google/auth-google.module';
     }),
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({
       driver: ApolloFederationDriver,
+      playground:false,
+      plugins:[ ApolloServerPluginLandingPageLocalDefault() ],
       autoSchemaFile: {
         federation: 2,
       },
