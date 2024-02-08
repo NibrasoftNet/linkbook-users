@@ -8,19 +8,23 @@ import { LoginResponse } from '../auth/types/login-response.type';
 
 @Resolver(() => AuthGoogle)
 export class AuthGoogleResolver {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly authGoogleService: AuthGoogleService,
-  ) {}
+	constructor(
+		private readonly authService: AuthService,
+		private readonly authGoogleService: AuthGoogleService,
+	) {}
 
-  @Mutation(() => AuthGoogle, { name: 'googleLogin' })
-  async createAuthGoogle(@Args('authGoogleLoginDto') authGoogleLoginDto: AuthGoogleLoginDto): Promise<LoginResponse> {
-    try {
-      const socialData = await this.authGoogleService.getProfileByToken(authGoogleLoginDto);
-      return this.authService.validateSocialLogin('google', socialData);
-    } catch (error) {
-      throw new HttpResponseException(error);
-    }
-
-  }
+	@Mutation(() => AuthGoogle, { name: 'googleLogin' })
+	async createAuthGoogle(
+		@Args('authGoogleLoginDto') authGoogleLoginDto: AuthGoogleLoginDto,
+	): Promise<LoginResponse> {
+		try {
+			const socialData =
+				await this.authGoogleService.getProfileByToken(
+					authGoogleLoginDto,
+				);
+			return this.authService.validateSocialLogin('google', socialData);
+		} catch (error) {
+			throw new HttpResponseException(error);
+		}
+	}
 }

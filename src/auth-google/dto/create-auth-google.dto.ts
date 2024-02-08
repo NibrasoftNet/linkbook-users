@@ -3,7 +3,7 @@ import { IsNotEmpty } from 'class-validator';
 
 @InputType()
 export class AuthGoogleLoginDto {
-  @Field(() => String)
-  @IsNotEmpty()
-  idToken: string;
+	@Field(() => String)
+	@IsNotEmpty()
+	idToken: string;
 }

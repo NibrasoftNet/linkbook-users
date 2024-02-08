@@ -6,15 +6,14 @@ import { lowerCaseTransformer } from '@NibrasoftNet/linkbook-commons';
 
 @InputType()
 export class AuthEmailLoginDto {
-  @Field(() => String)
-  @Transform(lowerCaseTransformer)
-  @Validate(IsExist, ['User', 'email'], {
-    message: 'Email Not Exists',
-  })
-  email: string;
+	@Field(() => String)
+	@Transform(lowerCaseTransformer)
+	@Validate(IsExist, ['User', 'email'], {
+		message: 'Email Not Exists',
+	})
+	email: string;
 
-  @Field(() => String)
-  @IsNotEmpty()
-  password: string;
+	@Field(() => String)
+	@IsNotEmpty()
+	password: string;
 }
-

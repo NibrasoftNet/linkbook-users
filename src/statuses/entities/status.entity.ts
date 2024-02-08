@@ -5,13 +5,12 @@ import { EntityHelper } from '../../utils/entities/entity-helper';
 
 @ObjectType()
 @Entity()
-export class Status  {
-  @Field(() => ID)
-  @PrimaryGeneratedColumn()
-  id: number;
+export class Status {
+	@Field(() => ID)
+	@PrimaryGeneratedColumn()
+	id: number;
 
-  @Field(() => String)
-  @Column()
-  name?: string;
+	@Field(() => String)
+	@Column()
+	name?: string;
 }
-

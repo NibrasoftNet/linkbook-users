@@ -5,8 +5,8 @@ import { AuthModule } from '../auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [ConfigModule, AuthModule],
-  providers: [AuthGoogleResolver, AuthGoogleService],
-  exports: [AuthGoogleService],
+	imports: [ConfigModule, AuthModule],
+	providers: [AuthGoogleResolver, AuthGoogleService],
+	exports: [AuthGoogleService],
 })
 export class AuthGoogleModule {}
