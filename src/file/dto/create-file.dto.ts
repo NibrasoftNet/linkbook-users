@@ -1,0 +1,13 @@
+import { Field, InputType } from '@nestjs/graphql';
+import { IsString } from 'class-validator';
+
+@InputType()
+export class CreateFileDto {
+	@Field(() => String)
+	@IsString()
+	path: string;
+
+	constructor(path: string) {
+		this.path = path;
+	}
+}

@@ -2,6 +2,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: 'tsconfig.json',
+    tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
   plugins: [
@@ -9,7 +10,7 @@ module.exports = {
     'import',
     'unused-imports', // Auto remove unused imports
     'sort-imports-es6-autofix', // Auto sort the import order
-    'prettier',
+    'prettier'
   ],
   extends: [
     // NestJS default extends
@@ -23,7 +24,7 @@ module.exports = {
     // Support TypeScript [Airbnb]
     'airbnb-typescript/base',
     // IMPORTANT: add this to the last of the extends to override ESLint rules
-    'plugin:prettier/recommended',
+    'plugin:prettier/recommended'
   ],
   root: true,
   env: {
@@ -32,6 +33,7 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
+    'prettier/prettier': 'error',
     // NestJS default rules
     '@typescript-eslint/interface-name-prefix': 'off',
     // NestJS default rules
@@ -52,7 +54,7 @@ module.exports = {
         ignorePropertyModificationsFor: ['_opts'],
       },
     ],
-    // Varialbes / Types naming rules
+    // Variables / Types naming rules
     '@typescript-eslint/naming-convention': [
       'error',
       // Enforce that all variables, functions and properties follow are camelCase
@@ -125,6 +127,6 @@ module.exports = {
     // Conflict with alias path
     'import/extensions': 'off',
     // Not enforce using 'this' in a class function since some function can be a pure function
-    'class-methods-use-this': 'off',
+    'class-methods-use-this': 'off'
   },
 };
