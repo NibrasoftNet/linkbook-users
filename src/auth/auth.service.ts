@@ -19,7 +19,6 @@ import { ClientGrpc } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
 import { ConfirmEmailDto } from './dto/confirm-email.dto';
 import { CreateOTPDto } from '../otp/dto/create-otp.dto';
-import { FileService } from '../file/file.service';
 import { JwtPayloadType } from './strategies/types/jwt-payload.type';
 import { JwtRefreshPayloadType } from './strategies/types/jwt-refresh-payload.type';
 import { JwtService } from '@nestjs/jwt';
@@ -43,6 +42,7 @@ import {
 	runOnTransactionRollback,
 } from 'typeorm-transactional';
 import { User } from '../users/entities/user.entity';
+import { UsersFileService } from '../file/users-file.service';
 import { UsersService } from '../users/users.service';
 import { firstValueFrom } from 'rxjs';
 import { plainToClass } from 'class-transformer';
@@ -60,7 +60,7 @@ export class AuthService implements OnModuleInit {
 		private sessionService: SessionService,
 		private otpService: OtpService,
 		private configService: ConfigService<AllConfigType>,
-		private readonly fileService: FileService,
+		private readonly usersFileService: UsersFileService,
 	) {}
 
 	onModuleInit() {
@@ -98,7 +98,7 @@ export class AuthService implements OnModuleInit {
 		});
 
 		if (authRegisterLoginDto.image) {
-			user.image = await this.fileService.create(
+			user.image = await this.usersFileService.create(
 				authRegisterLoginDto.image,
 			);
 		}

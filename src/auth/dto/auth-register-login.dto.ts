@@ -10,7 +10,7 @@ import {
 import { IsNotExist } from '../../utils/validators/is-not-exists.validator';
 import { Transform } from 'class-transformer';
 import { lowerCaseTransformer } from '@NibrasoftNet/linkbook-commons';
-import { CreateFileDto } from '../../file/dto/create-file.dto';
+import { CreateUsersFileDto } from '../../file/dto/create-users-file.dto';
 
 @InputType()
 export class AuthRegisterLoginDto {
@@ -40,10 +40,10 @@ export class AuthRegisterLoginDto {
 	@IsNotEmpty()
 	lastName: string;
 
-	@Field(() => CreateFileDto, { nullable: true })
+	@Field(() => CreateUsersFileDto, { nullable: true })
 	@IsOptional()
 	@IsObject()
-	image?: CreateFileDto;
+	image?: CreateUsersFileDto;
 
 	@Field(() => String)
 	@IsNotEmpty()

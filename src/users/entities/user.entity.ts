@@ -22,7 +22,7 @@ import {
 } from '@nestjs/graphql';
 import { EntityHelper } from '../../utils/entities/entity-helper';
 import { Exclude, Expose } from 'class-transformer';
-import { FileEntity } from '../../file/entities/file.entity';
+import { UsersFileEntity } from '../../file/entities/users-file.entity';
 import { Role } from '../../roles/entities/role.entity';
 import { Status } from '../../statuses/entities/status.entity';
 
@@ -67,14 +67,14 @@ export class User extends EntityHelper {
 	@Column({ type: 'varchar', nullable: true })
 	lastName: string | null;
 
-	@Field(() => FileEntity, { nullable: true })
-	@OneToOne(() => FileEntity, (file) => file, {
+	@Field(() => UsersFileEntity, { nullable: true })
+	@OneToOne(() => UsersFileEntity, (file) => file, {
 		eager: true,
 		nullable: true,
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn()
-	image?: FileEntity;
+	image?: UsersFileEntity;
 
 	@Field(() => String)
 	@Index()

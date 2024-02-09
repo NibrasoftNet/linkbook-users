@@ -3,7 +3,7 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 @Entity()
 @ObjectType()
-export class FileEntity {
+export class UsersFileEntity {
 	@Field(() => ID, { description: 'Unique identifier' })
 	@PrimaryGeneratedColumn('uuid')
 	id: string;

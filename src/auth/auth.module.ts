@@ -2,7 +2,6 @@ import { AnonymousStrategy } from './strategies/anonymous.strategy';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { FileModule } from '../file/file.module';
 import { IsExist } from '../utils/validators/is-exists.validator';
 import { IsNotExist } from '../utils/validators/is-not-exists.validator';
 import { JwtModule } from '@nestjs/jwt';
@@ -19,7 +18,6 @@ import { join } from 'path';
 		UsersModule,
 		SessionModule,
 		OtpModule,
-		FileModule,
 		JwtModule.register({}),
 		ClientsModule.register([
 			{

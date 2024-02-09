@@ -1,32 +1,32 @@
-import { CreateFileDto } from './dto/create-file.dto';
-import { FileEntity } from './entities/file.entity';
+import { CreateUsersFileDto } from './dto/create-users-file.dto';
+import { UsersFileEntity } from './entities/users-file.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
-import { UpdateFileDto } from './dto/update-file.dto';
+import { UpdateUsersFileDto } from './dto/update-users.file.dto';
 
 @Injectable()
-export class FileService {
+export class UsersFileService {
 	constructor(
-		@InjectRepository(FileEntity)
-		private readonly fileRepository: Repository<FileEntity>,
+		@InjectRepository(UsersFileEntity)
+		private readonly fileRepository: Repository<UsersFileEntity>,
 	) {}
 
-	async create(createFileDto: CreateFileDto): Promise<FileEntity> {
+	async create(createFileDto: CreateUsersFileDto): Promise<UsersFileEntity> {
 		const newFile = this.fileRepository.create(createFileDto);
 		return this.fileRepository.save(newFile);
 	}
 
 	@Transactional()
-	async createMany(paths: string[]): Promise<FileEntity[]> {
+	async createMany(paths: string[]): Promise<UsersFileEntity[]> {
 		const newFiles = paths.map((path) =>
-			this.fileRepository.create(new CreateFileDto(path)),
+			this.fileRepository.create(new CreateUsersFileDto(path)),
 		);
 		return this.fileRepository.save(newFiles);
 	}
 
-	async update(updateFileDto: UpdateFileDto): Promise<FileEntity> {
+	async update(updateFileDto: UpdateUsersFileDto): Promise<UsersFileEntity> {
 		const file = await this.fileRepository.findOneOrFail({
 			where: {
 				id: updateFileDto.id,

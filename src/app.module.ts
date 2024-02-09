@@ -2,6 +2,7 @@ import {
 	ApolloFederationDriver,
 	ApolloFederationDriverConfig,
 } from '@nestjs/apollo';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { AuthGoogleModule } from './auth-google/auth-google.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
@@ -14,6 +15,7 @@ import { PassportModule } from '@nestjs/passport';
 import { SessionModule } from './session/session.module';
 import { TypeOrmConfigService } from './database/typeorm-config.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersFileModule } from './file/users-file.module';
 import { UsersModule } from './users/users.module';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import appConfig from './config/app.config';
@@ -31,8 +33,8 @@ import googleConfig from './auth-google/config/google.config';
 		}),
 		GraphQLModule.forRoot<ApolloFederationDriverConfig>({
 			driver: ApolloFederationDriver,
-			playground: true,
-			// plugins:[ ApolloServerPluginLandingPageLocalDefault() ],
+			playground: false,
+			plugins: [ApolloServerPluginLandingPageLocalDefault()],
 			autoSchemaFile: {
 				federation: 2,
 			},
@@ -49,6 +51,7 @@ import googleConfig from './auth-google/config/google.config';
 		SessionModule,
 		OtpModule,
 		AuthGoogleModule,
+		UsersFileModule,
 	],
 	controllers: [],
 	providers: [JwtStrategy],
