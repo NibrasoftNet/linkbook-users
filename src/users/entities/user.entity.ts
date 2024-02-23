@@ -8,8 +8,6 @@ import {
 	Entity,
 	Index,
 	JoinColumn,
-	JoinTable,
-	ManyToMany,
 	ManyToOne,
 	OneToOne,
 	PrimaryGeneratedColumn,
@@ -99,10 +97,9 @@ export class User extends EntityHelper {
 	@DeleteDateColumn()
 	deletedAt: Date;
 
-	@ManyToMany(() => Community, (community) => community.members, {
+	@ManyToOne(() => Community, (community) => community.members, {
 		nullable: true,
 	})
-	@JoinTable()
 	communities?: Community[];
 
 	@AfterLoad()
