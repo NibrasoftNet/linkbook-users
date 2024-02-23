@@ -2,8 +2,6 @@ import { AnonymousStrategy } from './strategies/anonymous.strategy';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { IsExist } from '../utils/validators/is-exists.validator';
-import { IsNotExist } from '../utils/validators/is-not-exists.validator';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
@@ -34,8 +32,6 @@ import { join } from 'path';
 	providers: [
 		AuthResolver,
 		AuthService,
-		IsExist,
-		IsNotExist,
 		JwtStrategy,
 		JwtRefreshStrategy,
 		AnonymousStrategy,

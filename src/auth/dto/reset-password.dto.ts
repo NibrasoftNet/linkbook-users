@@ -1,11 +1,7 @@
-import { Field, Int, InputType, Float } from '@nestjs/graphql';
-import {
-	IsNotEmpty,
-	IsString,
-	IsStrongPassword,
-	Validate,
-} from 'class-validator';
-import { IsExist } from '../../utils/validators/is-exists.validator';
+import { Field, InputType, Int } from '@nestjs/graphql';
+import { IsExist } from '@NibrasoftNet/linkbook-commons';
+import { IsNotEmpty, IsStrongPassword, Validate } from 'class-validator';
+import { User } from '../../users/entities/user.entity';
 
 @InputType()
 export class ResetPasswordDto {
@@ -21,7 +17,7 @@ export class ResetPasswordDto {
 
 	@Field(() => Int)
 	@IsNotEmpty()
-	@Validate(IsExist, ['User', 'id'], {
+	@Validate(IsExist, [User, 'id'], {
 		message: 'User Not Exists',
 	})
 	userId: number;

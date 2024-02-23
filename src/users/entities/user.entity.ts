@@ -8,11 +8,15 @@ import {
 	Entity,
 	Index,
 	JoinColumn,
+	JoinTable,
+	ManyToMany,
 	ManyToOne,
 	OneToOne,
 	PrimaryGeneratedColumn,
 } from 'typeorm';
 import { AuthProvidersEnum } from '../../auth/enums/auth-providers.enum';
+// eslint-disable-next-line import/no-cycle
+import { Community } from '../../community/entities/community.entity';
 import {
 	Directive,
 	Field,
@@ -22,9 +26,9 @@ import {
 } from '@nestjs/graphql';
 import { EntityHelper } from '../../utils/entities/entity-helper';
 import { Exclude, Expose } from 'class-transformer';
-import { UsersFileEntity } from '../../file/entities/users-file.entity';
 import { Role } from '../../roles/entities/role.entity';
 import { Status } from '../../statuses/entities/status.entity';
+import { UsersFileEntity } from '../../file/entities/users-file.entity';
 
 registerEnumType(AuthProvidersEnum, { name: 'AuthProvidersEnum' });
 
@@ -94,6 +98,12 @@ export class User extends EntityHelper {
 	@Field(() => Date, { nullable: true })
 	@DeleteDateColumn()
 	deletedAt: Date;
+
+	@ManyToMany(() => Community, (community) => community.members, {
+		nullable: true,
+	})
+	@JoinTable()
+	communities?: Community[];
 
 	@AfterLoad()
 	public loadPreviousPassword(): void {

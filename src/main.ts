@@ -1,15 +1,14 @@
-import { NestFactory } from '@nestjs/core';
+import { AllConfigType } from './config/config.type';
 import { AppModule } from './app.module';
-import { useContainer } from 'class-validator';
 import { ConfigService } from '@nestjs/config';
 import { Logger, ValidationPipe } from '@nestjs/common';
-import { AllConfigType } from './config/config.type';
-import validationOptions from './utils/validation-options';
+import { NestFactory } from '@nestjs/core';
 import {
-	initializeTransactionalContext,
 	StorageDriver,
+	initializeTransactionalContext,
 } from 'typeorm-transactional';
-import { ResponseInterceptor } from './utils/interceptors/response.interceptor';
+import { useContainer } from 'class-validator';
+import validationOptions from './utils/validation-options';
 
 const logger = new Logger('LinkBook Users');
 async function bootstrap() {
@@ -26,7 +25,7 @@ async function bootstrap() {
 			exclude: ['/'],
 		},
 	);
-	//app.useGlobalInterceptors(new ResponseInterceptor());
+	// app.useGlobalInterceptors(new ResponseInterceptor());
 	app.useGlobalPipes(new ValidationPipe(validationOptions));
 	await app.listen(
 		configService.getOrThrow('app.port', { infer: true }),

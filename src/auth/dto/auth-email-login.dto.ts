@@ -1,14 +1,14 @@
-import { InputType, Field } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
+import { IsExist, lowerCaseTransformer } from '@NibrasoftNet/linkbook-commons';
 import { IsNotEmpty, Validate } from 'class-validator';
-import { IsExist } from '../../utils/validators/is-exists.validator';
 import { Transform } from 'class-transformer';
-import { lowerCaseTransformer } from '@NibrasoftNet/linkbook-commons';
+import { User } from '../../users/entities/user.entity';
 
 @InputType()
 export class AuthEmailLoginDto {
 	@Field(() => String)
 	@Transform(lowerCaseTransformer)
-	@Validate(IsExist, ['User', 'email'], {
+	@Validate(IsExist, [User, 'email'], {
 		message: 'Email Not Exists',
 	})
 	email: string;

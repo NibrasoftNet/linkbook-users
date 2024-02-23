@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { Global, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
+import { IResponseError } from './utils/exceptions/response.error.interface';
 import { JwtStrategy } from './auth/strategies/jwt.strategy';
 import { OtpModule } from './otp/otp.module';
 import { PassportModule } from '@nestjs/passport';
@@ -18,6 +19,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersFileModule } from './file/users-file.module';
 import { UsersModule } from './users/users.module';
 import { addTransactionalDataSource } from 'typeorm-transactional';
+import { CommunityModule } from './community/community.module';
+import { CategoryCommunityModule } from './category-community/category-community.module';
 import appConfig from './config/app.config';
 import authConfig from './auth/config/auth.config';
 import databaseConfig from './database/config/database.config';
@@ -38,6 +41,24 @@ import googleConfig from './auth-google/config/google.config';
 			autoSchemaFile: {
 				federation: 2,
 			},
+			formatError: (error) => {
+				const originalError = error.extensions
+					?.originalError as IResponseError;
+				if (!originalError) {
+					return {
+						message: error.message,
+						code: error.extensions?.code,
+						timestamp: new Date().toISOString(),
+					};
+				}
+				return {
+					statusCode: originalError.statusCode,
+					message: originalError.message,
+					code: originalError?.error || error.extensions?.code,
+					timestamp: new Date().toISOString(),
+					path: error.path,
+				};
+			},
 		}),
 		TypeOrmModule.forRootAsync({
 			useClass: TypeOrmConfigService,
@@ -52,6 +73,8 @@ import googleConfig from './auth-google/config/google.config';
 		OtpModule,
 		AuthGoogleModule,
 		UsersFileModule,
+		CommunityModule,
+		CategoryCommunityModule,
 	],
 	controllers: [],
 	providers: [JwtStrategy],

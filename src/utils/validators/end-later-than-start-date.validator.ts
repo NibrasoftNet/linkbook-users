@@ -1,9 +1,9 @@
+import { HttpResponseException } from '../exceptions/http-response.exception';
+import { ValidationArguments } from 'class-validator/types/validation/ValidationArguments';
 import {
 	ValidatorConstraint,
 	ValidatorConstraintInterface,
 } from 'class-validator';
-import { ValidationArguments } from 'class-validator/types/validation/ValidationArguments';
-import { HttpResponseException } from '../exceptions/http-response.exception';
 
 @ValidatorConstraint({ name: 'EndLaterThanStartDateValidator', async: true })
 export class EndLaterThanStartDateValidator

@@ -1,29 +1,31 @@
-import { InputType, Field, registerEnumType, ID } from '@nestjs/graphql';
-import { Transform, Type } from 'class-transformer';
-import { Role } from '../../roles/entities/role.entity';
+import { Field, ID, InputType } from '@nestjs/graphql';
 import {
 	IsEmail,
 	IsNotEmpty,
 	IsString,
 	IsStrongPassword,
-	MinLength,
 	Validate,
 } from 'class-validator';
+import {
+	IsExist,
+	IsNotExist,
+	lowerCaseTransformer,
+} from '@NibrasoftNet/linkbook-commons';
+import { Role } from '../../roles/entities/role.entity';
 import { Status } from '../../statuses/entities/status.entity';
-import { IsNotExist } from '../../utils/validators/is-not-exists.validator';
-import { IsExist } from '../../utils/validators/is-exists.validator';
-import { lowerCaseTransformer } from '@NibrasoftNet/linkbook-commons';
+import { Transform } from 'class-transformer';
+import { User } from '../entities/user.entity';
 
 // Register the Role and Status entities as GraphQL types
-//registerEnumType(Role, { name: 'Role' });
-//registerEnumType(Status, { name: 'Status' });
+// registerEnumType(Role, { name: 'Role' });
+// registerEnumType(Status, { name: 'Status' });
 
 @InputType() // Decorate with @InputType() for GraphQL input
 export class CreateUserDto {
 	@Field(() => String)
 	@Transform(lowerCaseTransformer)
 	@IsNotEmpty()
-	@Validate(IsNotExist, ['User', 'email'], {
+	@Validate(IsNotExist, [User, 'email'], {
 		message: 'Email Already Exists',
 	})
 	@IsEmail()
@@ -42,7 +44,7 @@ export class CreateUserDto {
 
 	@Field(() => String)
 	@IsNotEmpty()
-	@Validate(IsNotExist, ['User', 'phone'], {
+	@Validate(IsNotExist, [User, 'phone'], {
 		message: 'Phone Number Already Exists',
 	})
 	phone: string;
@@ -64,13 +66,13 @@ export class CreateUserDto {
 	lastName: string;
 
 	@Field(() => ID, { nullable: true })
-	@Validate(IsNotExist, ['Role', 'id'], {
+	@Validate(IsNotExist, [Role, 'id'], {
 		message: 'Role Not Exists',
 	})
 	role?: Role | null;
 
 	@Field(() => ID, { nullable: true })
-	@Validate(IsExist, ['Status', 'id'], {
+	@Validate(IsNotExist, [Status, 'id'], {
 		message: 'Status Not Exists',
 	})
 	status?: Status;

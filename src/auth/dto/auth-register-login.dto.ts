@@ -1,3 +1,4 @@
+import { CreateUsersFileDto } from '../../file/dto/create-users-file.dto';
 import { Field, InputType } from '@nestjs/graphql';
 import {
 	IsEmail,
@@ -7,16 +8,18 @@ import {
 	IsStrongPassword,
 	Validate,
 } from 'class-validator';
-import { IsNotExist } from '../../utils/validators/is-not-exists.validator';
+import {
+	IsNotExist,
+	lowerCaseTransformer,
+} from '@NibrasoftNet/linkbook-commons';
 import { Transform } from 'class-transformer';
-import { lowerCaseTransformer } from '@NibrasoftNet/linkbook-commons';
-import { CreateUsersFileDto } from '../../file/dto/create-users-file.dto';
+import { User } from '../../users/entities/user.entity';
 
 @InputType()
 export class AuthRegisterLoginDto {
 	@Field(() => String)
 	@Transform(lowerCaseTransformer)
-	@Validate(IsNotExist, ['User', 'email'], {
+	@Validate(IsNotExist, [User, 'email'], {
 		message: 'Email Already Exists',
 	})
 	@IsEmail()
@@ -47,7 +50,7 @@ export class AuthRegisterLoginDto {
 
 	@Field(() => String)
 	@IsNotEmpty()
-	@Validate(IsNotExist, ['User', 'phone'], {
+	@Validate(IsNotExist, [User, 'phone'], {
 		message: 'Phone Number Already Exists',
 	})
 	phone: string;
