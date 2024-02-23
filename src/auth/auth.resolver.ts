@@ -11,7 +11,6 @@ import {
 	CurrentUser,
 	Public,
 } from '@NibrasoftNet/linkbook-commons';
-import { HttpResponseException } from '../utils/exceptions/http-response.exception';
 import { JwtPayloadType } from './strategies/types/jwt-payload.type';
 import { JwtRefreshPayloadType } from './strategies/types/jwt-refresh-payload.type';
 import { LoginResponse } from './types/login-response.type';
@@ -35,11 +34,8 @@ export class AuthResolver {
 		@Args('authRegisterLoginDto')
 		authRegisterLoginDto: AuthRegisterLoginDto,
 	): Promise<AuthRegisterResponseDto> {
-		try {
 			return await this.authService.registerUser(authRegisterLoginDto);
-		} catch (error) {
-			throw new HttpResponseException(error);
-		}
+
 	}
 
 	@Public()
@@ -47,11 +43,7 @@ export class AuthResolver {
 	async confirmEmail(
 		@Args('confirmEmailDto') confirmEmailDto: ConfirmEmailDto,
 	): Promise<boolean> {
-		try {
 			return await this.authService.confirmEmail(confirmEmailDto);
-		} catch (error) {
-			throw new HttpResponseException(error);
-		}
 	}
 
 	@Public()
@@ -59,11 +51,7 @@ export class AuthResolver {
 	async resendOtp(
 		@Args('resendOtpDto') resendOtpDto: ResendOtpDto,
 	): Promise<AuthRegisterResponseDto> {
-		try {
 			return await this.authService.resendOtp(resendOtpDto);
-		} catch (error) {
-			throw new HttpResponseException(error);
-		}
 	}
 
 	@Public()
@@ -71,11 +59,7 @@ export class AuthResolver {
 	async loginByEmail(
 		@Args('authEmailLoginDto') authEmailLoginDto: AuthEmailLoginDto,
 	): Promise<LoginResponse> {
-		try {
 			return await this.authService.validateLogin(authEmailLoginDto);
-		} catch (error) {
-			throw new HttpResponseException(error);
-		}
 	}
 
 	@UseGuards(RefreshAuthGuard, RolesGuard)
@@ -84,12 +68,8 @@ export class AuthResolver {
 	async refresh(
 		@CurrentSession() session: JwtRefreshPayloadType,
 	): Promise<Omit<LoginResponse, 'user'>> {
-		try {
 			console.log('ssssss', session);
 			return await this.authService.refreshToken(session);
-		} catch (error) {
-			throw new HttpResponseException(error);
-		}
 	}
 
 	@UseGuards(AccessAuthGuard)
@@ -113,13 +93,9 @@ export class AuthResolver {
 	async forgotPassword(
 		@Args('forgotPasswordDto') forgotPasswordDto: AuthForgotPasswordDto,
 	): Promise<AuthRegisterResponseDto> {
-		try {
 			return await this.authService.forgotPassword(
 				forgotPasswordDto.email,
 			);
-		} catch (error) {
-			throw new HttpResponseException(error);
-		}
 	}
 
 	@Public()
@@ -127,11 +103,7 @@ export class AuthResolver {
 	async resetPassword(
 		@Args('resetPasswordDto') resetPasswordDto: ResetPasswordDto,
 	): Promise<boolean> {
-		try {
 			return await this.authService.resetPassword(resetPasswordDto);
-		} catch (error) {
-			throw new HttpResponseException(error);
-		}
 	}
 
 	@Public()
@@ -139,11 +111,7 @@ export class AuthResolver {
 	async confirmOTP(
 		@Args('confirmEmailDto') confirmEmailDto: ConfirmEmailDto,
 	): Promise<boolean> {
-		try {
 			return await this.authService.confirmOTP(confirmEmailDto);
-		} catch (error) {
-			throw new HttpResponseException(error);
-		}
 	}
 
 	/*  @UseGuards(AccessAuthGuard, RolesGuard)
