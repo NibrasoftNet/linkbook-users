@@ -3,7 +3,7 @@ import { FindOptionsRelations, FindOptionsWhere, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { NullableType } from '@NibrasoftNet/linkbook-commons';
-import { UpdateUserInput } from './dto/update-user.input';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -32,7 +32,7 @@ export class UsersService {
 		return this.usersRepository.find();
 	}
 
-	update(id: number, updateUserInput: UpdateUserInput) {
+	update(id: number, updateUserInput: UpdateUserDto) {
 		return `This action updates a #${id} user`;
 	}
 

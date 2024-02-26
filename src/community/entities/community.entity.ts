@@ -22,11 +22,15 @@ export class Community {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@Field()
+	@Field(() => ID)
+	@Column()
+	creatorId: number;
+
+	@Field(() => String)
 	@Column()
 	name: string;
 
-	@Field({ nullable: true })
+	@Field(() => String, { nullable: true })
 	@Column({ nullable: true })
 	description: string;
 

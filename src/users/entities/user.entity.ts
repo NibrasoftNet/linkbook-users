@@ -98,6 +98,7 @@ export class User extends EntityHelper {
 	deletedAt: Date;
 
 	@ManyToOne(() => Community, (community) => community.members, {
+		cascade: true,
 		nullable: true,
 	})
 	communities?: Community[];

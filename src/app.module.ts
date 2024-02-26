@@ -1,3 +1,4 @@
+import { AnonymousStrategy } from './auth/strategies/anonymous.strategy';
 import {
 	ApolloFederationDriver,
 	ApolloFederationDriverConfig,
@@ -5,11 +6,14 @@ import {
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { AuthGoogleModule } from './auth-google/auth-google.module';
 import { AuthModule } from './auth/auth.module';
+import { CategoryCommunityModule } from './category-community/category-community.module';
+import { CommunityModule } from './community/community.module';
 import { ConfigModule } from '@nestjs/config';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { Global, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { IResponseError } from './utils/exceptions/response.error.interface';
+import { JwtRefreshStrategy } from './auth/strategies/jwt-refresh.strategy';
 import { JwtStrategy } from './auth/strategies/jwt.strategy';
 import { OtpModule } from './otp/otp.module';
 import { PassportModule } from '@nestjs/passport';
@@ -19,12 +23,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersFileModule } from './file/users-file.module';
 import { UsersModule } from './users/users.module';
 import { addTransactionalDataSource } from 'typeorm-transactional';
-import { CommunityModule } from './community/community.module';
-import { CategoryCommunityModule } from './category-community/category-community.module';
 import appConfig from './config/app.config';
 import authConfig from './auth/config/auth.config';
 import databaseConfig from './database/config/database.config';
 import googleConfig from './auth-google/config/google.config';
+import { CommonModule } from '@NibrasoftNet/linkbook-commons';
 
 @Global()
 @Module({
@@ -66,6 +69,7 @@ import googleConfig from './auth-google/config/google.config';
 				return addTransactionalDataSource(new DataSource(options));
 			},
 		}),
+		CommonModule,
 		PassportModule,
 		AuthModule,
 		UsersModule,
@@ -77,6 +81,6 @@ import googleConfig from './auth-google/config/google.config';
 		CategoryCommunityModule,
 	],
 	controllers: [],
-	providers: [JwtStrategy],
+	providers: [JwtStrategy, JwtRefreshStrategy, AnonymousStrategy],
 })
 export class AppModule {}

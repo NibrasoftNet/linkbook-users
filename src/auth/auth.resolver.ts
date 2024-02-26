@@ -9,10 +9,10 @@ import { ConfirmEmailDto } from './dto/confirm-email.dto';
 import {
 	CurrentSession,
 	CurrentUser,
+	JwtPayloadType,
+	JwtRefreshPayloadType,
 	Public,
 } from '@NibrasoftNet/linkbook-commons';
-import { JwtPayloadType } from './strategies/types/jwt-payload.type';
-import { JwtRefreshPayloadType } from './strategies/types/jwt-refresh-payload.type';
 import { LoginResponse } from './types/login-response.type';
 import { RefreshAuthGuard } from '../utils/guards/auth/refresh-auth-guard';
 import { ResendOtpDto } from './dto/resend-otp.dto';
@@ -34,8 +34,7 @@ export class AuthResolver {
 		@Args('authRegisterLoginDto')
 		authRegisterLoginDto: AuthRegisterLoginDto,
 	): Promise<AuthRegisterResponseDto> {
-			return await this.authService.registerUser(authRegisterLoginDto);
-
+		return this.authService.registerUser(authRegisterLoginDto);
 	}
 
 	@Public()
@@ -43,7 +42,7 @@ export class AuthResolver {
 	async confirmEmail(
 		@Args('confirmEmailDto') confirmEmailDto: ConfirmEmailDto,
 	): Promise<boolean> {
-			return await this.authService.confirmEmail(confirmEmailDto);
+		return this.authService.confirmEmail(confirmEmailDto);
 	}
 
 	@Public()
@@ -51,7 +50,7 @@ export class AuthResolver {
 	async resendOtp(
 		@Args('resendOtpDto') resendOtpDto: ResendOtpDto,
 	): Promise<AuthRegisterResponseDto> {
-			return await this.authService.resendOtp(resendOtpDto);
+		return this.authService.resendOtp(resendOtpDto);
 	}
 
 	@Public()
@@ -59,7 +58,7 @@ export class AuthResolver {
 	async loginByEmail(
 		@Args('authEmailLoginDto') authEmailLoginDto: AuthEmailLoginDto,
 	): Promise<LoginResponse> {
-			return await this.authService.validateLogin(authEmailLoginDto);
+		return this.authService.validateLogin(authEmailLoginDto);
 	}
 
 	@UseGuards(RefreshAuthGuard, RolesGuard)
@@ -68,8 +67,8 @@ export class AuthResolver {
 	async refresh(
 		@CurrentSession() session: JwtRefreshPayloadType,
 	): Promise<Omit<LoginResponse, 'user'>> {
-			console.log('ssssss', session);
-			return await this.authService.refreshToken(session);
+		console.log('ssssss', session);
+		return this.authService.refreshToken(session);
 	}
 
 	@UseGuards(AccessAuthGuard)
@@ -93,9 +92,7 @@ export class AuthResolver {
 	async forgotPassword(
 		@Args('forgotPasswordDto') forgotPasswordDto: AuthForgotPasswordDto,
 	): Promise<AuthRegisterResponseDto> {
-			return await this.authService.forgotPassword(
-				forgotPasswordDto.email,
-			);
+		return this.authService.forgotPassword(forgotPasswordDto.email);
 	}
 
 	@Public()
@@ -103,7 +100,7 @@ export class AuthResolver {
 	async resetPassword(
 		@Args('resetPasswordDto') resetPasswordDto: ResetPasswordDto,
 	): Promise<boolean> {
-			return await this.authService.resetPassword(resetPasswordDto);
+		return this.authService.resetPassword(resetPasswordDto);
 	}
 
 	@Public()
@@ -111,7 +108,7 @@ export class AuthResolver {
 	async confirmOTP(
 		@Args('confirmEmailDto') confirmEmailDto: ConfirmEmailDto,
 	): Promise<boolean> {
-			return await this.authService.confirmOTP(confirmEmailDto);
+		return this.authService.confirmOTP(confirmEmailDto);
 	}
 
 	/*  @UseGuards(AccessAuthGuard, RolesGuard)
