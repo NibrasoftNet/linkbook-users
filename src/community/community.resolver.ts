@@ -7,8 +7,8 @@ import {
 	CurrentUser,
 	JwtPayloadType,
 	RoleEnum,
+	Roles,
 } from '@NibrasoftNet/linkbook-commons';
-import { Roles } from '../roles/roles.decorator';
 import { RolesGuard } from '../roles/roles.guard';
 import { UpdateCommunityDto } from './dto/update-community.dto';
 import { UseGuards } from '@nestjs/common';

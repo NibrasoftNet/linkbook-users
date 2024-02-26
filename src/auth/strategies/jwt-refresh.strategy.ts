@@ -2,8 +2,10 @@ import { AllConfigType } from 'src/config/config.type';
 import { ConfigService } from '@nestjs/config';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtRefreshPayloadType } from './types/jwt-refresh-payload.type';
-import { OrNeverType } from '@NibrasoftNet/linkbook-commons';
+import {
+	JwtRefreshPayloadType,
+	OrNeverType,
+} from '@NibrasoftNet/linkbook-commons';
 import { PassportStrategy } from '@nestjs/passport';
 
 @Injectable()

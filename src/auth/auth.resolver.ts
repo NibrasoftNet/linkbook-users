@@ -12,13 +12,13 @@ import {
 	JwtPayloadType,
 	JwtRefreshPayloadType,
 	Public,
+	RoleEnum,
+	Roles,
 } from '@NibrasoftNet/linkbook-commons';
 import { LoginResponse } from './types/login-response.type';
 import { RefreshAuthGuard } from '../utils/guards/auth/refresh-auth-guard';
 import { ResendOtpDto } from './dto/resend-otp.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
-import { RoleEnum } from '../roles/roles.enum';
-import { Roles } from '../roles/roles.decorator';
 import { RolesGuard } from '../roles/roles.guard';
 import { SoftDeleteResult } from '../utils/types/delete-result.type';
 import { UseGuards } from '@nestjs/common';
